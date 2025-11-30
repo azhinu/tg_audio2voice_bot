@@ -51,11 +51,6 @@ func runWebhook(ctx context.Context, bot *tgbotapi.BotAPI, hookURL *url.URL, por
 		return errors.New("webhook url is empty")
 	}
 
-	path := hookURL.Path
-	if path == "" {
-		path = "/"
-	}
-
 	webhookCfg, err := tgbotapi.NewWebhook(hookURL.String())
 	if err != nil {
 		return fmt.Errorf("build webhook config: %w", err)
@@ -72,7 +67,7 @@ func runWebhook(ctx context.Context, bot *tgbotapi.BotAPI, hookURL *url.URL, por
 	}
 
 	addr := fmt.Sprintf(":%d", port)
-	updates := bot.ListenForWebhook(path)
+	updates := bot.ListenForWebhook("/")
 
 	server := &http.Server{
 		Addr: addr,
@@ -81,7 +76,7 @@ func runWebhook(ctx context.Context, bot *tgbotapi.BotAPI, hookURL *url.URL, por
 
 	errCh := make(chan error, 1)
 	go func() {
-		log.Printf("webhook listening on %s%s", addr, path)
+		log.Printf("webhook listening on %s", addr)
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			errCh <- err
 			return
