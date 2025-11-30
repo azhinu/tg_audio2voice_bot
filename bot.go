@@ -25,7 +25,7 @@ func startBot(ctx context.Context, cli CLI) error {
 	log.Printf("authorized as %s (version=%s, debug=%v)", bot.Self.UserName, version, cli.Debug)
 
 	switch {
-	case cli.Debug || cli.URL == nil:
+	case cli.URL == nil:
 		return runPolling(ctx, bot)
 	default:
 		return runWebhook(ctx, bot, cli.URL, cli.Port)
