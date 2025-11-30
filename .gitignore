@@ -1,0 +1,8 @@
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Built binary
+/tg_audio2voice_bot

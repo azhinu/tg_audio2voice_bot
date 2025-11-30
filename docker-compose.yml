@@ -1,0 +1,9 @@
+services:
+  tg_audio2voice_bot:
+    image: ghcr.io/azhinu/tg_audio2voice_bot:latest
+    environment:
+      TG_A2V_TOKEN:
+      TG_A2V_WEBHOOK_URL:
+    ports:
+      - 8080:8080
+    restart: unless-stopped
