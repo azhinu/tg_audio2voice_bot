@@ -23,15 +23,15 @@ type CLI struct {
 }
 
 var (
-	version = "dev"
-	repoURL = "https://github.com/azhinu/audio2voice"
-	cli     CLI
+	version        = "dev"
+	repoURL        = "https://github.com/azhinu/audio2voice"
+	cli            CLI
+	appDescription = fmt.Sprintf("Telegram audio-to-voice bot (version %s. Source: %s", version, repoURL)
 )
 
 const (
 	defaultTimeout = 2 * time.Minute
 	defaultPort    = 8080
-	appDescription = "Telegram audio-to-voice bot (version {{version}}). Source: {{repoURL}}"
 )
 
 func main() {
