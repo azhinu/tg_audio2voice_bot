@@ -140,7 +140,6 @@ func handleConversionJob(job conversionJob) {
 
 	voice := tgbotapi.NewVoice(job.msg.Chat.ID, tgbotapi.FilePath(voicePath))
 	voice.ReplyToMessageID = job.msg.MessageID
-	voice.Caption = "Done!"
 
 	if _, err = job.bot.Send(voice); err != nil {
 		log.Printf("send voice error: %v", err)
