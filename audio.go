@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -134,4 +135,21 @@ func convertToVoice(ctx context.Context, inputPath string) (string, error) {
 	}
 
 	return outputPath, nil
+}
+
+func getAudioDuration(ctx context.Context, path string) (int, error) {
+	probeCmd := exec.CommandContext(ctx, "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", path)
+	probeOut, err := probeCmd.Output()
+	if err != nil {
+		return 0, err
+	}
+	durStr := strings.TrimSpace(string(probeOut))
+	if durStr == "" {
+		return 0, fmt.Errorf("duration not found")
+	}
+	f, err := strconv.ParseFloat(durStr, 64)
+	if err != nil {
+		return 0, err
+	}
+	return int(f), nil
 }

@@ -138,9 +138,16 @@ func handleConversionJob(job conversionJob) {
 	}
 	defer os.Remove(voicePath)
 
+	voiceDuration, err := getAudioDuration(jobCtx, voicePath)
+	if err != nil {
+		log.Printf("get duration error: %v", err)
+		replyText(job.bot, job.msg.Chat.ID, job.msg.MessageID, "Could not determine the duration of the voice message.")
+		voiceDuration = 0
+	}
+
 	voice := tgbotapi.NewVoice(job.msg.Chat.ID, tgbotapi.FilePath(voicePath))
 	voice.ReplyToMessageID = job.msg.MessageID
-
+	voice.Duration = voiceDuration
 	if _, err = job.bot.Send(voice); err != nil {
 		log.Printf("send voice error: %v", err)
 		replyText(job.bot, job.msg.Chat.ID, job.msg.MessageID, "Could not send the voice message.")
